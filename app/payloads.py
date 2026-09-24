@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import List, Dict
 RELEVANT_ACTIONS = {"opened", "synchronize"}
 
 
