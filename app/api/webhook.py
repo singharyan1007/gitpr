@@ -23,8 +23,8 @@ async def webhook(
     """
 
     body=await request.body() # contains raw bytes from Github webhook payload
-    settings= request.app.state.settings
-    # the request object first gets the fastapi application object, then gets the settings object from the application state
+    settings= request.app.state.settings # the request object first gets the fastapi application object, then gets the settings object from the application state
+
 
 
     # Verify the signature of the incoming request

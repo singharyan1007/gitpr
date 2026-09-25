@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     github_token: str
-    webhook_secret: str
+    github_webhook_secret: str
     database_url: str = "sqlite+aiosqlite:///./reviews.db"
     redis_url: str = "redis://localhost:6379"
     environment: str = "development"
@@ -15,4 +15,4 @@ class Settings(BaseSettings):
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()
+    return Settings()  # type: ignore[call-arg]
