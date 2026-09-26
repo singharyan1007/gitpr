@@ -50,6 +50,15 @@ async def webhook(
     response_body = format_findings(findings)
     await gh.post_review_comments(payload.owner, payload.repo, payload.number, response_body)
 
+    await request.app.state.repository.insert_if_new(
+        owner = payload.owner,
+        repo = payload.repo,
+        pr_number = payload.number,
+        head_sha = payload.head_sha,
+        findings_count = len(findings),
+        body = body 
+    )
+
     return {"ok":True, "findings":response_body}
 
 
