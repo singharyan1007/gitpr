@@ -32,11 +32,11 @@ async def webhook(
         raise HTTPException(status_code=401, detail="Invalid signature")
 
     if x_github_event != "pull_request":
-        return Response(status_code=204, content="Not a pull request event")  # No Content for irrelevant events
+        return {"ok": True, "skipped": f"event={x_github_event}"}  # No Content for irrelevant events
 
     payload = PullRequestPayload.model_validate_json(body)
     if payload.action not in RELEVANT_ACTIONS:
-        return Response(status_code=204, content="Irrelevant pull request action")  # No Content for irrelevant actions
+        return {"ok": True, "skipped": f"action={payload.action}"}  # No Content for irrelevant actions
 
     # Call the GitHubClient object
     gh = GitHubClient(request.app.state.http, settings)
@@ -47,6 +47,9 @@ async def webhook(
     # Run all checks on the diff
     findings = run_all_checks(diff)
 
-    return {"ok":True, "findings": format_findings(findings)}
+    response_body = format_findings(findings)
+    await gh.post_review_comments(payload.owner, payload.repo, payload.number, response_body)
+
+    return {"ok":True, "findings":response_body}
 
 

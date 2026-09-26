@@ -89,5 +89,5 @@ class GitHubClient:
             reset_at = int(resp.headers.get("X-RateLimit-Reset", 0))
             raise RateLimited(reset_at=reset_at)
 
-    
+
 
