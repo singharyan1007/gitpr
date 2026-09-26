@@ -70,9 +70,9 @@ class GitHubClient:
         """
         url = f"{BASE}/repos/{ownerName}/{repoName}/pulls/{prNumber}/reviews"
         data = {
-            "body": "Automated review comments",
+            "body": body,
             "event": "COMMENT",
-            "comments": body,
+            
         }
         response = await self._http.post(url, headers=self._headers, json=data)
         response.raise_for_status()
